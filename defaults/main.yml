@@ -6,4 +6,10 @@ icinga2_enabled_features:
   - command
   - ido-mysql
   - syslog
+  - graphite
+icinga2_mysql_packages:
+  - mysql
+  - mysql-server
+  - python3-PyMySQL
+icinga2_mysql_root_password: vaultrootpassword
 ...

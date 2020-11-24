@@ -11,6 +11,12 @@
 - name: Install Icinga2
   include_tasks: install.yml
 
+- name: Install MySQL server
+  include_tasks: mysql-8.yml
+  when: >
+    ansible_os_family == 'RedHat' and
+    ansible_distribution_major_version == '8'
+
 - name: Enable Icinga2 features
   include_tasks: features.yml
   when: icinga2_enabled_features is defined
