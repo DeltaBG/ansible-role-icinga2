@@ -1,0 +1,9 @@
+---
+icinga2_install_path: /etc/icinga2
+icinga2_owner: icinga
+icinga2_group: icinga
+icinga2_enabled_features:
+  - command
+  - ido-mysql
+  - syslog
+...
