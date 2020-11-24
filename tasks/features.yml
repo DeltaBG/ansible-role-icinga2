@@ -1,0 +1,11 @@
+---
+- name: Enable Icinga2 features
+  file:
+    src: "{{ icinga2_install_path }}/features-available/{{ item }}.conf"
+    path: "{{ icinga2_install_path }}/features-enabled/{{ item }}.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+    state: link
+  loop: "{{ icinga2_enabled_features }}"
+  notify: restart icinga2
+...

@@ -10,4 +10,8 @@
 
 - name: Install Icinga2
   include_tasks: install.yml
+
+- name: Enable Icinga2 features
+  include_tasks: features.yml
+  when: icinga2_enabled_features is defined
 ...
