@@ -1,0 +1,12 @@
+---
+- name: Import Icinga2 repo key
+  rpm_key:
+    key: https://packages.icinga.com/icinga.key
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Install Icinga2 repo
+  package:
+    name: "{{ icinga2_repo }}"
+    state: present
+...
