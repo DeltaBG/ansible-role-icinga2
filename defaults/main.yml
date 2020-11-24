@@ -7,9 +7,14 @@ icinga2_enabled_features:
   - ido-mysql
   - syslog
   - graphite
+
 icinga2_mysql_packages:
   - mysql
   - mysql-server
   - python3-PyMySQL
 icinga2_mysql_root_password: vaultrootpassword
+icinga2_mysql_user: icinga2
+icinga2_mysql_database: icinga2
+icinga2_mysql_database_host: localhost
+icinga2_mysql_user_password: vaulticinga2userpassword
 ...

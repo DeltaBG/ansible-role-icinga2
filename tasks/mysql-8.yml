@@ -54,4 +54,44 @@
       [client]
       user="root"
       password="{{ icinga2_mysql_root_password }}"
+
+- name: Remove the test database
+  mysql_db:
+    name: test
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: absent
+
+- name: Create user defined databases
+  mysql_db:
+    name: "{{ icinga2_mysql_database }}"
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: present
+
+- name: Remove anonymous users
+  mysql_user:
+    name: ''
+    host_all: true
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: absent
+  no_log: true
+  tags: mariadb
+
+- name: Create Icinga2 MySQL user
+  mysql_user:
+    name: "{{ icinga2_mysql_user }}"
+    password: "{{ icinga2_mysql_user_password }}"
+    host: "{{ icinga2_mysql_database_host|default('localhost') }}"
+    priv: "{{ icinga2_mysql_database }}.*:ALL"
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: present
+  no_log: true
+  tags: mariadb
 ...
