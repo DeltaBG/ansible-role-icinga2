@@ -17,4 +17,5 @@ icinga2_mysql_user: icinga2
 icinga2_mysql_database: icinga2
 icinga2_mysql_database_host: localhost
 icinga2_mysql_user_password: vaulticinga2userpassword
+icinga2_initial_schema_sql: /usr/share/icinga2-ido-mysql/schema/mysql.sql
 ...

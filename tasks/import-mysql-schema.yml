@@ -1,0 +1,6 @@
+---
+- name: Import the schema
+  shell: "mysql {{ icinga2_mysql_database }} < {{ icinga2_initial_schema_sql }}"
+  when: db_created.changed
+  notify: restart icinga2
+...

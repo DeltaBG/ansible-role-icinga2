@@ -20,4 +20,7 @@
 - name: Enable Icinga2 features
   include_tasks: features.yml
   when: icinga2_enabled_features is defined
+
+- name: Import initial Icinga2 MySQL schema
+  include_tasks: import-mysql-schema.yml
 ...
