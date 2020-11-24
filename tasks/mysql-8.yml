@@ -63,7 +63,7 @@
     login_unix_socket: "{{ icinga2_mysql_socket }}"
     state: absent
 
-- name: Create user defined databases
+- name: Create user defined database for Icinga2
   mysql_db:
     name: "{{ icinga2_mysql_database }}"
     login_user: root
@@ -71,6 +71,14 @@
     login_unix_socket: "{{ icinga2_mysql_socket }}"
     state: present
   register: db_created
+
+- name: Create user defined database for Icinga2 Web
+  mysql_db:
+    name: "{{ icinga2_web_mysql_user }}"
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: present
 
 - name: Remove anonymous users
   mysql_user:
@@ -81,9 +89,8 @@
     login_unix_socket: "{{ icinga2_mysql_socket }}"
     state: absent
   no_log: true
-  tags: mariadb
 
-- name: Create Icinga2 MySQL user
+- name: Create Icinga2 MySQL user for Icinga2
   mysql_user:
     name: "{{ icinga2_mysql_user }}"
     password: "{{ icinga2_mysql_user_password }}"
@@ -94,5 +101,16 @@
     login_unix_socket: "{{ icinga2_mysql_socket }}"
     state: present
   no_log: true
-  tags: mariadb
+
+- name: Create Icinga2 MySQL user for Icinga2 Web
+  mysql_user:
+    name: "{{ icinga2_web_mysql_user }}"
+    password: "{{ icinga2_web_mysql_user_password }}"
+    host: "{{ icinga2_mysql_database_host|default('localhost') }}"
+    priv: "{{ icinga2_web_mysql_database }}.*:ALL"
+    login_user: root
+    login_password: "{{ icinga2_mysql_root_password }}"
+    login_unix_socket: "{{ icinga2_mysql_socket }}"
+    state: present
+  no_log: true
 ...
