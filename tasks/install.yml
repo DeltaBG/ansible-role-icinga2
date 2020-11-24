@@ -9,4 +9,16 @@
   package:
     name: "{{ icinga2_repo }}"
     state: present
+
+- name: Install Icinga2 packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ icinga2_packages }}"
+
+- name: Enable and start Icinga2 service
+  service:
+    name: icinga2
+    enabled: yes
+    state: started
 ...
