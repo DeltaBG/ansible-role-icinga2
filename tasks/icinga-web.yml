@@ -1,0 +1,31 @@
+---
+- name: Install Icinga2 web packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ icinga2_icingaweb_packages }}"
+
+- name: Enable and start php-fpm service
+  service:
+    name: php-fpm
+    state: started
+    enabled: yes
+
+- name: Enable and start httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Configure Icinga2 web server (Apache)
+  shell: icingacli setup config webserver apache
+  when: "icinga2_web_server == 'apache'"
+  notify: restart httpd
+
+# - name: Generate Icinga2 setup token
+#   shell: icingacli setup token create
+#   register: icinga2_setup_token
+
+# - debug:
+#     msg: "{{ icinga2_setup_token.stdout }}. Navigate to http://{{ ansible_default_ipv4.address }}/icingaweb2 in order to finish the setup."
+...
