@@ -1,0 +1,11 @@
+/**
+ * The IdoMysqlConnection type implements MySQL support
+ * for DB IDO.
+ */
+
+object IdoMysqlConnection "ido-mysql" {
+  user = "{{ icinga2_mysql_user }}"
+  password = "{{ icinga2_mysql_user_password }}"
+  host = "{{ icinga2_mysql_database_host }}"
+  database = "{{ icinga2_mysql_database }}"
+}
