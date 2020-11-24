@@ -5,4 +5,5 @@ icinga2_packages:
   - icinga2-selinux
   - icinga2-ido-mysql
   - vim-icinga2
+icinga2_mysql_socket: /var/lib/mysql/mysql.sock
 ...
