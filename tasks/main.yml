@@ -23,4 +23,10 @@
 
 - name: Import initial Icinga2 MySQL schema
   include_tasks: import-mysql-schema.yml
+
+- name: Install Icingaweb
+  include_tasks: icinga-web.yml
+
+- name: Setup API
+  include_tasks: api.yml
 ...
