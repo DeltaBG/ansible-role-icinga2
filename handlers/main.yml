@@ -3,4 +3,9 @@
   service:
     name: icinga2
     state: restarted
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
 ...
