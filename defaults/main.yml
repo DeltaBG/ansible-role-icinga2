@@ -7,6 +7,7 @@ icinga2_enabled_features:
   - ido-mysql
   - syslog
   - graphite
+  - api
 
 icinga2_mysql_packages:
   - mysql
@@ -18,4 +19,13 @@ icinga2_mysql_database: icinga2
 icinga2_mysql_database_host: localhost
 icinga2_mysql_user_password: vaulticinga2userpassword
 icinga2_initial_schema_sql: /usr/share/icinga2-ido-mysql/schema/mysql.sql
+
+icinga2_web_mysql_user: icinga2_web
+icinga2_web_mysql_database: icinga2_web
+icinga2_web_mysql_user_password: vaulticingaweb2userpassword
+
+icinga2_api_username: root
+icinga2_api_password: apipassword
+
+icinga2_web_server: apache
 ...
