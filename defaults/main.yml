@@ -1,6 +1,5 @@
 ---
 icinga2_install_path: /etc/icinga2
-icinga2_web_install_path: /etc/icingaweb2/
 icinga2_owner: icinga
 icinga2_group: icinga
 icinga2_enabled_features:
@@ -24,11 +23,13 @@ icinga2_initial_schema_sql: /usr/share/icinga2-ido-mysql/schema/mysql.sql
 icinga2_web_mysql_user: icinga2_web
 icinga2_web_mysql_database: icinga2_web
 icinga2_web_mysql_user_password: vaulticingaweb2userpassword
+icinga2_web_install_path: /etc/icingaweb2/
+icinga2_web_server: apache
+icinga2_web_owner: apache
+icinga2_web_group: icingaweb2
 
 icinga2_api_username: root
 icinga2_api_password: apipassword
-
-icinga2_web_server: apache
 
 icinga2_graphite_download_url: https://github.com/icinga/icingaweb2-module-graphite
 icinga2_graphite_owner: root

@@ -36,4 +36,7 @@
 
 - name: Setup API
   include_tasks: icinga-api.yml
+
+- name: Post-tasks for Icingaweb
+  include_tasks: icinga-web-post.yml
 ...

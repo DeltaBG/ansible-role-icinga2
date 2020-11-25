@@ -21,11 +21,4 @@
   shell: icingacli setup config webserver apache
   when: "icinga2_web_server == 'apache'"
   notify: restart httpd
-
-- name: Generate Icinga2 setup token
-  shell: icingacli setup token create
-  register: icinga2_setup_token
-
-- debug:
-    msg: "{{ icinga2_setup_token.stdout }}. Navigate to http://{{ ansible_default_ipv4.address }}/icingaweb2 in order to finish the setup."
 ...
