@@ -19,6 +19,8 @@
 
 - name: Configure Icinga2 web server (Apache)
   shell: icingacli setup config webserver apache
-  when: "icinga2_web_server == 'apache'"
+  when: >
+    "icinga2_web_server == 'apache'" and not
+    icinga2_installed
   notify: restart httpd
 ...

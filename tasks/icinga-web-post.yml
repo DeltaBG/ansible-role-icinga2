@@ -6,11 +6,14 @@
     recurse: yes
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
+  when: not icinga2_installed
 
 - name: Generate Icinga2 setup token
   shell: icingacli setup token create
   register: icinga2_setup_token
+  when: not icinga2_installed
 
 - debug:
     msg: "{{ icinga2_setup_token.stdout }}. Navigate to http://{{ ansible_default_ipv4.address }}/icingaweb2 in order to finish the setup."
+  when: not icinga2_installed
 ...

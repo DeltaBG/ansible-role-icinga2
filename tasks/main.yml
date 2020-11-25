@@ -8,17 +8,32 @@
     - "{{ ansible_os_family }}.yml"
   tags: mariadb
 
-- name: Install Icinga2
-  include_tasks: install.yml
+- name: Check if Icinga2 has been already installed
+  stat:
+    path: "{{ icinga2_install_path }}/installed"
+  register: icinga2_install_chk
+  ignore_errors: yes
+
+- set_fact:
+    icinga2_installed: True
+  when: icinga2_install_chk.stat.exists
+
+- set_fact:
+    icinga2_installed: False
+  when: not icinga2_install_chk.stat.exists
 
 - name: Install MySQL server
   include_tasks: mysql-install.yml
   when: >
     ansible_os_family == 'RedHat' and
-    ansible_distribution_major_version == '8'
+    ansible_distribution_major_version == '8' and not
+    icinga2_installed
 
 - name: Configure MySQL
   include_tasks: mysql-configure.yml
+
+- name: Install Icinga2
+  include_tasks: icinga2-install.yml
 
 - name: Enable Icinga2 features
   include_tasks: icinga-features.yml
@@ -26,6 +41,7 @@
 
 - name: Import initial Icinga2 MySQL schema
   include_tasks: import-mysql-schema.yml
+  when: not icinga2_installed
 
 - name: Install Icingaweb
   include_tasks: icinga-web.yml
@@ -39,4 +55,11 @@
 
 - name: Post-tasks for Icingaweb
   include_tasks: icinga-web-post.yml
+
+- name: Mark Icinga2 as installed
+  file:
+    path: "{{ icinga2_install_path }}/installed"
+    mode: 000
+    state: touch
+  when: not icinga2_installed
 ...

@@ -1,14 +1,9 @@
 ---
-- name: Check if Icinga2 api has been already setup
-  stat:
-    path: /var/lib/icinga2/certs//db-icinga2.crt
-  register: icinga2_api
-
 - name: Setup Icinga2 api if enabled
   shell: icinga2 api setup
   when: >
-    "'api' in icinga2_enabled_features" and
-    not icinga2_api.stat.exists
+    "'api' in icinga2_enabled_features" and not
+    icinga2_installed
 
 - name: Configure Icinga2 api feature if present and not setup
   template:
@@ -18,8 +13,8 @@
     group: "{{ icinga2_group }}"
   notify: restart icinga2
   when: >
-    "'api' in icinga2_enabled_features" and
-    not icinga2_api.stat.exists
+    "'api' in icinga2_enabled_features" and not
+    icinga2_installed
 
 - name: Configure API user and password
   template:

@@ -58,7 +58,6 @@
     login_password: "{{ icinga2_mysql_root_password }}"
     login_unix_socket: "{{ icinga2_mysql_socket }}"
     state: present
-  register: db_created
 
 - name: Create user defined database for Icinga2 Web
   mysql_db:

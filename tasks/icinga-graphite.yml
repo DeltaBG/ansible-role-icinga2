@@ -10,28 +10,34 @@
     state: directory
     owner: "{{ icinga2_graphite_owner }}"
     group: "{{ icinga2_graphite_group }}"
-  when: not graphite_installed.stat.exists
+  when: >
+    not graphite_installed.stat.exists and not
+    icinga2_installed
 
 - name: Download and install Graphite module
   git:
     repo: "{{ icinga2_graphite_download_url }}"
     dest: "{{ icinga2_web_install_path }}/modules/graphite"
-  when: not graphite_installed.stat.exists
+  when: >
+    not graphite_installed.stat.exists and not
+    icinga2_installed
   notify: restart icinga2
 
-- name: Set proper permissions
+- name: Set proper permissions on Graphite
   file:
     path: "{{ icinga2_web_install_path }}/modules/graphite"
     state: directory
     recurse: yes
     owner: "{{ icinga2_graphite_owner }}"
     group: "{{ icinga2_graphite_group }}"
+  when: not icinga2_installed
 
 - name: Install Python packages
   package:
     name: "{{ item }}"
     state: present
   loop: "{{ icinga2_python_packages }}"
+  when: not icinga2_installed
 
 - name: Install Python modules
   pip:
@@ -41,6 +47,7 @@
     - whisper
     - graphite-web
     - service_identity
+  when: not icinga2_installed
 
 - name: Configure carbon.conf
   template:
