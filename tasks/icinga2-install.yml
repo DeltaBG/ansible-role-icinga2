@@ -27,6 +27,7 @@
   when: >
     ansible_os_family == "RedHat" and
     ansible_distribution_major_version == "8"
+  changed_when: False
 
 - name: Install Nagios plugins
   package:
