@@ -1,0 +1,69 @@
+---
+- name: Check if Graphite module has been already installed
+  stat:
+    path: "{{ icinga2_web_install_path }}/modules/graphite"
+  register: graphite_installed
+
+- name: Create Graphite install directory
+  file:
+    path: "{{ icinga2_web_install_path }}/modules/graphite"
+    state: directory
+    owner: "{{ icinga2_graphite_owner }}"
+    group: "{{ icinga2_graphite_group }}"
+  when: not graphite_installed.stat.exists
+
+- name: Download and install Graphite module
+  git:
+    repo: "{{ icinga2_graphite_download_url }}"
+    dest: "{{ icinga2_web_install_path }}/modules/graphite"
+  when: not graphite_installed.stat.exists
+  notify: restart icinga2
+
+- name: Set proper permissions
+  file:
+    path: "{{ icinga2_web_install_path }}/modules/graphite"
+    state: directory
+    recurse: yes
+    owner: "{{ icinga2_graphite_owner }}"
+    group: "{{ icinga2_graphite_group }}"
+
+- name: Install Python packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ icinga2_python_packages }}"
+
+- name: Install Python modules
+  pip:
+    name: "{{ item }}"
+  loop:
+    - carbon
+    - whisper
+    - graphite-web
+    - service_identity
+
+- name: Configure carbon.conf
+  template:
+    src: graphite/carbon.conf.j2
+    dest: "{{ icinga2_graphite_conf_dir }}/carbon.conf"
+  notify: restart cabon-cache
+
+- name: Configure storage-schemas
+  template:
+    src: graphite/storage-schemas.conf.j2
+    dest: "{{ icinga2_graphite_conf_dir }}/storage-schemas.conf"
+  notify: restart cabon-cache
+
+- name: Configure init script
+  template:
+    src: graphite/carbon-cache.service.j2
+    dest: /etc/init.d/carbon-cache
+    mode: 0755
+  notify: restart cabon-cache
+
+- name: Enable and start Carbon service
+  service:
+    name: carbon-cache
+    state: started
+    enabled: yes
+...

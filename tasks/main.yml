@@ -30,6 +30,10 @@
 - name: Install Icingaweb
   include_tasks: icinga-web.yml
 
+- name: Install Icinga2 Graphite module
+  include_tasks: icinga-graphite.yml
+  when: "'graphite' in icinga2_enabled_features"
+
 - name: Setup API
   include_tasks: api.yml
 ...

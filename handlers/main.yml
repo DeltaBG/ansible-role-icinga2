@@ -8,4 +8,9 @@
   service:
     name: httpd
     state: restarted
+
+- name: restart cabon-cache
+  service:
+    name: carbon-cache
+    state: restarted
 ...

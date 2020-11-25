@@ -12,4 +12,7 @@ icinga2_icingaweb_packages:
   - php-json
   - php-ldap
 icinga2_mysql_socket: /var/lib/mysql/mysql.sock
+icinga2_python_packages:
+  - python3
+  - python3-pip
 ...
