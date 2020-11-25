@@ -36,4 +36,8 @@ icinga2_graphite_owner: root
 icinga2_graphite_group: icingaweb2
 icinga2_graphite_install_dir: /opt/graphite
 icinga2_graphite_conf_dir: "{{ icinga2_graphite_install_dir }}/conf"
+
+icinga2_nagios_plugins_packages:
+  - perl-utf8-all
+  - nagios-plugins-all
 ...
