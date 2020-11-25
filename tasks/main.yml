@@ -17,6 +17,9 @@
     ansible_os_family == 'RedHat' and
     ansible_distribution_major_version == '8'
 
+- name: Configure MySQL
+  include_tasks: mysql-configure.yml
+
 - name: Enable Icinga2 features
   include_tasks: features.yml
   when: icinga2_enabled_features is defined
