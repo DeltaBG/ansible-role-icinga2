@@ -21,7 +21,7 @@
   include_tasks: mysql-configure.yml
 
 - name: Enable Icinga2 features
-  include_tasks: features.yml
+  include_tasks: icinga-features.yml
   when: icinga2_enabled_features is defined
 
 - name: Import initial Icinga2 MySQL schema
@@ -35,5 +35,5 @@
   when: "'graphite' in icinga2_enabled_features"
 
 - name: Setup API
-  include_tasks: api.yml
+  include_tasks: icinga-api.yml
 ...
