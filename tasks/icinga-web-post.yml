@@ -16,6 +16,14 @@
     "icinga2_web_server == 'apache'"
   notify: restart httpd
 
+- name: Configure Icingaweb resources.ini
+  template:
+    src: web/resources.ini.j2
+    dest: "{{ icinga2_web_config_path }}/resources.ini"
+    owner: "{{ icinga2_web_server }}"
+    group: "{{ icinga2_web_group }}"
+  when: not icinga2_installed
+
 - name: Generate Icinga2 setup token
   shell: icingacli setup token create
   register: icinga2_setup_token
@@ -23,7 +31,7 @@
 
 - name: Set proper permissions on setup token
   file:
-    path: "{{ icinga2_web_install_path }}/setup.token"
+    path: "{{ icinga2_web_config_path }}/setup.token"
     owner: "{{ icinga2_web_server }}"
     group: "{{ icinga2_web_group }}"
   when: not icinga2_installed

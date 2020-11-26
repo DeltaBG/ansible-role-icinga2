@@ -1,0 +1,21 @@
+[icinga2_web]
+type = "db"
+db = "mysql"
+host = "{{ icinga2_mysql_database_host }}"
+port = ""
+dbname = "{{ icinga2_web_mysql_database }}"
+username = "{{ icinga2_web_mysql_user }}"
+password = "{{ icinga2_web_mysql_user_password }}"
+charset = ""
+use_ssl = "0"
+
+[icinga2_ido]
+type = "db"
+db = "mysql"
+host = "{{ icinga2_mysql_database_host }}"
+port = ""
+dbname = "{{ icinga2_mysql_database }}"
+username = "{{ icinga2_mysql_user }}"
+password = "{{ icinga2_mysql_user_password }}"
+charset = "{{ icinga2_mysql_charset }}"
+use_ssl = "0"
