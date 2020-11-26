@@ -4,6 +4,12 @@
     path: "{{ icinga2_web_install_path }}/modules/graphite"
   register: graphite_installed
 
+- name: Install Graphite prerequisite packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ icinga2_graphite_packages }}"
+
 - name: Create Graphite install directory
   file:
     path: "{{ icinga2_web_install_path }}/modules/graphite"
@@ -32,6 +38,24 @@
     group: "{{ icinga2_graphite_group }}"
   when: not icinga2_installed
 
+- name: Create Graphite module config directory
+  file:
+    path: "{{ icinga2_web_config_path }}/modules/graphite"
+    state: directory
+    owner: "{{ icinga2_web_owner }}"
+    group: "{{ icinga2_web_group }}"
+  when: >
+    not graphite_installed.stat.exists and not
+    icinga2_installed
+
+- name: Configure Graphite config.ini
+  template:
+    src: graphite/carbon-config.ini.j2
+    dest: "{{ icinga2_web_config_path }}/modules/graphite/config.ini"
+    owner: "{{ icinga2_web_owner }}"
+    group: "{{ icinga2_web_group }}"
+  notify: restart icinga2
+
 - name: Install Python packages
   package:
     name: "{{ item }}"
@@ -45,9 +69,19 @@
   loop:
     - carbon
     - whisper
-    - graphite-web
+    - git+https://github.com/graphite-project/graphite-web
     - service_identity
   when: not icinga2_installed
+
+- name: Configure graphite.wsgi
+  template:
+    src: graphite/graphite.wsgi.j2
+    dest: "{{ icinga2_graphite_install_dir }}/conf/graphite.wsgi"
+    mode: 0755
+  notify: restart httpd
+  when: >
+    "icinga2_web_server == 'apache'" and not
+    icinga2_installed
 
 - name: Configure carbon.conf
   template:

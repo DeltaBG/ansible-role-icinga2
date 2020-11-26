@@ -1,0 +1,41 @@
+LoadModule wsgi_module modules/mod_wsgi.so
+
+WSGISocketPrefix /var/run/wsgi
+
+Listen localhost:{{ icinga2_graphite_port }}
+<VirtualHost localhost:{{ icinga2_graphite_port }}>
+
+    ServerName graphite
+    DocumentRoot "{{ icinga2_graphite_install_dir }}/webapp"
+    ErrorLog /var/log/httpd/graphite_error.log
+    CustomLog /var/log/httpd/graphite_access.log common
+
+    WSGIDaemonProcess graphite-web processes=5 threads=5 display-name='%{GROUP}' inactivity-timeout=120
+    WSGIProcessGroup graphite-web
+    WSGIApplicationGroup %{GLOBAL}
+    WSGIImportScript {{ icinga2_graphite_install_dir }}/conf/graphite.wsgi process-group=graphite-web application-group=%{GLOBAL}
+
+    WSGIScriptAlias / {{ icinga2_graphite_install_dir }}/conf/graphite.wsgi
+
+    Alias /static/ {{ icinga2_graphite_install_dir }}/static/
+
+    <Directory {{ icinga2_graphite_install_dir }}/static/>
+            <IfVersion < 2.4>
+                    Order deny,allow
+                    Allow from all
+            </IfVersion>
+            <IfVersion >= 2.4>
+                    Require all granted
+            </IfVersion>
+    </Directory>
+
+    <Directory {{ icinga2_graphite_install_dir }}/conf/>
+            <IfVersion < 2.4>
+                    Order deny,allow
+                    Allow from all
+            </IfVersion>
+            <IfVersion >= 2.4>
+                    Require all granted
+            </IfVersion>
+    </Directory>
+</VirtualHost>

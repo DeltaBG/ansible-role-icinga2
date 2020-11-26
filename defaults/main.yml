@@ -23,7 +23,8 @@ icinga2_initial_schema_sql: /usr/share/icinga2-ido-mysql/schema/mysql.sql
 icinga2_web_mysql_user: icinga2_web
 icinga2_web_mysql_database: icinga2_web
 icinga2_web_mysql_user_password: vaulticingaweb2userpassword
-icinga2_web_install_path: /etc/icingaweb2
+icinga2_web_install_path: /usr/share/icingaweb2
+icinga2_web_config_path: /etc/icingaweb2
 icinga2_web_server: apache
 icinga2_web_owner: apache
 icinga2_web_group: icingaweb2
@@ -36,6 +37,7 @@ icinga2_graphite_owner: root
 icinga2_graphite_group: icingaweb2
 icinga2_graphite_install_dir: /opt/graphite
 icinga2_graphite_conf_dir: "{{ icinga2_graphite_install_dir }}/conf"
+icinga2_graphite_port: 8070
 
 icinga2_nagios_plugins_packages:
   - perl-utf8-all

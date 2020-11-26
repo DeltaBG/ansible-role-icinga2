@@ -1,0 +1,4 @@
+[graphite]
+url = "http://localhost:{{ icinga2_graphite_port }}/"
+# Will most likely be the one below if you use ssl and domain name #base_url = "http://{{ ansible_default_ipv4.address }}:{{ icinga2_graphite_port }}/graphite/render/?"
+insecure = "0"

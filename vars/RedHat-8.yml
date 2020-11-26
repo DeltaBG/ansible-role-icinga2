@@ -11,6 +11,9 @@ icinga2_icingaweb_packages:
   - icingaweb2
   - php-json
   - php-ldap
+  - python3-mod_wsgi
+icinga2_graphite_packages:
+  - cairo
 icinga2_mysql_socket: /var/lib/mysql/mysql.sock
 icinga2_python_packages:
   - python3

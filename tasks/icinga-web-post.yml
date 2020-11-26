@@ -8,9 +8,24 @@
     group: "{{ icinga2_web_group }}"
   when: not icinga2_installed
 
+- name: Configure Graphite web
+  template:
+    src: web/graphite-web.conf.j2
+    dest: /etc/httpd/conf.d/graphite-web.conf
+  when: >
+    "icinga2_web_server == 'apache'"
+  notify: restart httpd
+
 - name: Generate Icinga2 setup token
   shell: icingacli setup token create
   register: icinga2_setup_token
+  when: not icinga2_installed
+
+- name: Set proper permissions on setup token
+  file:
+    path: "{{ icinga2_web_install_path }}/setup.token"
+    owner: "{{ icinga2_web_server }}"
+    group: "{{ icinga2_web_group }}"
   when: not icinga2_installed
 
 - debug:
