@@ -24,4 +24,21 @@
     group: "{{ icinga2_group }}"
   notify: restart icinga2
   when: "'api' in icinga2_enabled_features"
+
+- name: Generate TicketSalt for the first time
+  shell: openssl rand -base64 30
+  register: icinga2_ticket_salt
+  when: >
+    "'api' in icinga2_enabled_features" and not
+    icinga2_installed
+
+- name: Set Icinga2 TicketSalt once
+  lineinfile:
+    path: "{{ icinga2_install_path }}/constants.conf"
+    regexp: "const TicketSalt =.*"
+    line: 'const TicketSalt = "{{ icinga2_ticket_salt.stdout }}"'
+  notify: restart icinga2
+  when: >
+    "'api' in icinga2_enabled_features" and not
+    icinga2_installed
 ...
