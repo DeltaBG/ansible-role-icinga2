@@ -69,7 +69,7 @@
   loop:
     - carbon
     - whisper
-    - git+https://github.com/graphite-project/graphite-web
+    - graphite-web
     - service_identity
   when: not icinga2_installed
 
@@ -101,6 +101,32 @@
     dest: /etc/init.d/carbon-cache
     mode: 0755
   notify: restart cabon-cache
+
+- name: Get migration script
+  get_url:
+    url: "{{ icinga2_graphite_migration_script_download_url }}"
+    dest: "{{ icinga2_graphite_install_dir }}/webapp/"
+    mode: 0755
+    owner: "{{ icinga2_web_owner }}"
+    group: "{{ icinga2_web_group }}"
+  when: not icinga2_installed
+
+- name: Run migration script
+  shell: "python3 ./manage.py migrate"
+  args:
+    chdir: "{{ icinga2_graphite_install_dir }}/webapp/"
+  when: not icinga2_installed
+
+- name: Fix Graphite permissions
+  file:
+    path: "{{ icinga2_graphite_install_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ icinga2_web_owner }}"
+    group: "{{ icinga2_web_group }}"
+  when: >
+    "icinga2_web_server == 'apache'" and not
+    icinga2_installed
 
 - name: Enable and start Carbon service
   service:
