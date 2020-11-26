@@ -6,7 +6,6 @@
     - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags: mariadb
 
 - name: Check if Icinga2 has been already installed
   stat:
