@@ -1,0 +1,10 @@
+---
+- name: Configure Icinga2 services
+  template:
+    src: service_config/icinga2_services.conf.j2
+    dest: "{{ icinga2_install_path }}/conf.d/services.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  notify: reload icinga2
+  tags: configure_services
+...

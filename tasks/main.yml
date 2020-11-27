@@ -61,4 +61,15 @@
     mode: 000
     state: touch
   when: not icinga2_installed
+
+- name: Configure Icinga2 services
+  include_tasks: icinga-serices.yml
+  tags: configure_services
+
+- name: Configure Icinga2 clients
+  include_tasks: icinga-clients.yml
+  when: >
+    icinga2_client_group is defined and 
+    (groups[icinga2_client_group]|length>0)
+  tags: configure_clients
 ...

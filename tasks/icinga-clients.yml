@@ -1,0 +1,20 @@
+---
+- name: Create client config dirs
+  file:
+    path: "{{ icinga2_install_path }}/conf.d/{{ hostvars[item].inventory_hostname }}"
+    state: directory
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  loop: "{{ groups[icinga2_client_group] }}"
+  tags: configure_clients
+
+- name: Configure client
+  template:
+    src: client_config/hosts.conf.j2
+    dest: "{{ icinga2_install_path }}/conf.d/{{ hostvars[item].inventory_hostname }}/host.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  loop: "{{ groups[icinga2_client_group] }}"
+  tags: configure_clients
+  notify: reload icinga2
+...

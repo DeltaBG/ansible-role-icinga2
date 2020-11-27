@@ -1,0 +1,29 @@
+/*
+ * Service apply rules.
+ *
+ * The CheckCommand objects `ping4`, `ping6`, etc
+ * are provided by the plugin check command templates.
+ * Check the documentation for details.
+ *
+ * Tip: Use `icinga2 object list --type Service` to
+ * list all service objects after running
+ * configuration validation (`icinga2 daemon -C`).
+ */
+
+/*
+ * This is an example host based on your
+ * local host's FQDN. Specify the NodeName
+ * constant in `constants.conf` or use your
+ * own description, e.g. "{{ inventory_hostname }}".
+ */
+
+{% for service in icinga2_services %}
+{% if service.type == "simple" %}apply Service "{{ service.name }}" {
+  {{ service.definition }}
+}
+{% elif service.type == "array" %}apply Service for ({{ service.name }} => {{ service.array_definition }}) {
+  {{ service.definition }}
+}
+{% endif %}
+
+{% endfor %}

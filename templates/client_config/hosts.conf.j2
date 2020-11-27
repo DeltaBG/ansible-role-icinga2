@@ -1,0 +1,7 @@
+object Host "{{ hostvars[item].inventory_hostname }}" {
+  import "generic-host"
+  address = "{{ hostvars[item].ansible_host }}"
+  name = "{{ hostvars[item].inventory_hostname }}"
+  {{ hostvars[item].icinga2_host_specific_services|default(icinga2_host_specific_services_defaults) }}
+  vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
+}

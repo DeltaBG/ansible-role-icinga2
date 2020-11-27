@@ -44,4 +44,93 @@ icinga2_graphite_migration_script_download_url: https://raw.githubusercontent.co
 icinga2_nagios_plugins_packages:
   - perl-utf8-all
   - nagios-plugins-all
+
+icinga2_client_group: [] # override via group_vars or host_vars
+
+icinga2_services:
+  - name: ping4
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "ping4"
+
+      assign where host.address
+  - name: ping6
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "ping6"
+
+      assign where host.address6
+  - name: ssh
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "ssh"
+
+      assign where (host.address || host.address6) && host.vars.os == "Linux"
+  - name: http_vhost
+    type: array
+    array_definition: config in host.vars.http_vhosts
+    definition: |
+      import "generic-service"
+
+      check_command = "http"
+
+      vars += config
+  - name: disk
+    type: array
+    array_definition: config in host.vars.disks
+    definition: |
+      import "generic-service"
+
+      check_command = "disk"
+
+      vars += config
+  - name: icinga
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "icinga"
+
+      assign where host.name == NodeName
+  - name: load
+    type: simple
+    definition:
+      import "generic-service"
+
+      check_command = "load"
+
+      /* Used by the ScheduledDowntime apply rule in `downtimes.conf`. */
+      vars.backup_downtime = "02:00-03:00"
+
+      assign where host.name == NodeName
+  - name: procs
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "procs"
+
+      assign where host.name == NodeName
+  - name: swap
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "swap"
+
+      assign where host.name == NodeName
+  - name: users
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "users"
+
+      assign where host.name == NodeName
 ...
