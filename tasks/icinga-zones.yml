@@ -5,6 +5,8 @@
     dest: "{{ icinga2_install_path }}/zones.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  tags: configure_services
+  tags:
+    - configure
+    - configure_services
   notify: restart icinga2
 ...

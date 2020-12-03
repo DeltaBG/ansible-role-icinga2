@@ -5,7 +5,10 @@
     state: directory
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  tags: configure_client
+  tags:
+    - configure
+    - configure_client
+    - configure_services
 
 - name: Configure client
   template:
@@ -14,6 +17,9 @@
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
   loop: "{{ groups[icinga2_client_group] }}"
-  tags: configure_clients
+  tags:
+    - configure
+    - configure_client
+    - configure_services
   notify: reload icinga2
 ...

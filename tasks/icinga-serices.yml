@@ -6,5 +6,7 @@
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
   notify: restart icinga2
-  tags: configure_services
+  tags:
+    - configure
+    - configure_services
 ...

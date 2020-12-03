@@ -64,16 +64,23 @@
 
 - name: Configure Icinga2 zone.conf
   include_tasks: icinga-zones.yml
-  tags: configure_services
+  tags:
+    - configure
+    - configure_services
 
 - name: Configure Icinga2 services
   include_tasks: icinga-serices.yml
-  tags: configure_services
+  tags:
+    - configure
+    - configure_services
 
 - name: Configure Icinga2 clients
   include_tasks: icinga-clients.yml
   when: >
     icinga2_client_group is defined and 
     (groups[icinga2_client_group]|length>0)
-  tags: configure_clients
+  tags:
+    - configure
+    - configure_client
+    - configure_services
 ...
