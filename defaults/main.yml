@@ -72,6 +72,7 @@ icinga2_services:
       import "generic-service"
 
       check_command = "ssh"
+      command_endpoint = host.vars.agent_endpoint
 
       assign where (host.address || host.address6) && host.vars.os == "Linux"
   - name: http_vhost
@@ -90,6 +91,8 @@ icinga2_services:
       import "generic-service"
 
       check_command = "disk"
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
 
       vars += config
   - name: icinga
