@@ -12,12 +12,12 @@ object Zone ZoneName {
   endpoints = [ NodeName ]
 }*/
 
-object Endpoint "{{ ansible_host }}" {
+object Endpoint "{{ inventory_hostname }}" {
   host = NodeName
 }
 
 object Zone "{{ icinga2_zone_master_endpoint_name }}" {
-  endpoints = [ "{{ ansible_host }}" ]
+  endpoints = [ "{{ inventory_hostname }}" ]
 }
 
 /*
