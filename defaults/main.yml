@@ -41,6 +41,8 @@ icinga2_graphite_conf_dir: "{{ icinga2_graphite_install_dir }}/conf"
 icinga2_graphite_port: 8070
 icinga2_graphite_migration_script_download_url: https://raw.githubusercontent.com/graphite-project/graphite-web/master/webapp/manage.py
 
+icinga2_zone_master_endpoint_name: "master"
+
 icinga2_nagios_plugins_packages:
   - perl-utf8-all
   - nagios-plugins-all

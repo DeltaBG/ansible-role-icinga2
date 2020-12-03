@@ -16,7 +16,7 @@ object Endpoint "{{ ansible_host }}" {
   host = NodeName
 }
 
-object Zone "master" {
+object Zone "{{ icinga2_zone_master_endpoint_name }}" {
   endpoints = [ "{{ ansible_host }}" ]
 }
 
