@@ -17,7 +17,7 @@
  * own description, e.g. "{{ inventory_hostname }}".
  */
 
-{% for service in icinga2_services %}
+{% for service in icinga2_services_defaults %}
 {% if service.type == "simple" %}apply Service "{{ service.name }}" {
   {{ service.definition }}
 }

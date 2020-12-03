@@ -49,7 +49,7 @@ icinga2_nagios_plugins_packages:
 
 icinga2_client_group: [] # override via group_vars or host_vars
 
-icinga2_services:
+icinga2_services_defaults:
   - name: ping4
     type: simple
     definition: |
