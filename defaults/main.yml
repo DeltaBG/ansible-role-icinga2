@@ -56,7 +56,6 @@ icinga2_services:
       import "generic-service"
 
       check_command = "ping4"
-
       assign where host.address
   - name: ping6
     type: simple
@@ -72,8 +71,8 @@ icinga2_services:
       import "generic-service"
 
       check_command = "ssh"
-      command_endpoint = host.vars.agent_endpoint
 
+      command_endpoint = host.vars.agent_endpoint
       assign where (host.address || host.address6) && host.vars.os == "Linux"
   - name: http_vhost
     type: array
@@ -83,6 +82,8 @@ icinga2_services:
 
       check_command = "http"
 
+      command_endpoint = host.vars.agent_endpoint
+
       vars += config
   - name: disk
     type: array
@@ -91,6 +92,7 @@ icinga2_services:
       import "generic-service"
 
       check_command = "disk"
+
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.agent_endpoint
 
@@ -102,7 +104,8 @@ icinga2_services:
 
       check_command = "icinga"
 
-      assign where host.name == NodeName
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
   - name: load
     type: simple
     definition:
@@ -113,7 +116,8 @@ icinga2_services:
       /* Used by the ScheduledDowntime apply rule in `downtimes.conf`. */
       vars.backup_downtime = "02:00-03:00"
 
-      assign where host.name == NodeName
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
   - name: procs
     type: simple
     definition: |
@@ -121,7 +125,8 @@ icinga2_services:
 
       check_command = "procs"
 
-      assign where host.name == NodeName
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
   - name: swap
     type: simple
     definition: |
@@ -129,6 +134,7 @@ icinga2_services:
 
       check_command = "swap"
 
+      command_endpoint = host.vars.agent_endpoint
       assign where host.name == NodeName
   - name: users
     type: simple
@@ -137,5 +143,6 @@ icinga2_services:
 
       check_command = "users"
 
-      assign where host.name == NodeName
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
 ...
