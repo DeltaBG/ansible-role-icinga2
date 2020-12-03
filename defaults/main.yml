@@ -84,6 +84,8 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
 
+      assign where host.vars.http_enabled == true
+
       vars += config
   - name: disk
     type: array
@@ -114,9 +116,11 @@ icinga2_services_defaults:
       check_command = "load"
 
       /* Used by the ScheduledDowntime apply rule in `downtimes.conf`. */
+
       vars.backup_downtime = "02:00-03:00"
 
       command_endpoint = host.vars.agent_endpoint
+
       assign where host.vars.agent_endpoint
   - name: procs
     type: simple
