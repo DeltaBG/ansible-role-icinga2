@@ -1,8 +1,8 @@
 ---
-- name: Configure main zone.conf
+- name: Configure main zones.conf
   template:
     src: zones/zones.conf.j2
-    dest: "{{ icinga2_install_path }}/zone.conf"
+    dest: "{{ icinga2_install_path }}/zones.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
   tags: configure_services
