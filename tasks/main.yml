@@ -62,6 +62,10 @@
     state: touch
   when: not icinga2_installed
 
+- name: Configure Icinga2 zone.conf
+  include_tasks: icinga-zones.yml
+  tags: configure_services
+
 - name: Configure Icinga2 services
   include_tasks: icinga-serices.yml
   tags: configure_services

@@ -1,0 +1,10 @@
+---
+- name: Configure main zone.conf
+  template:
+    src: zones/zones.conf.j2
+    dest: "{{ icinga2_install_path }}/zone.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  tags: configure_services
+  notify: restart icinga2
+...
