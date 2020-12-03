@@ -139,7 +139,7 @@ icinga2_services_defaults:
       check_command = "swap"
 
       command_endpoint = host.vars.agent_endpoint
-      assign where host.name == NodeName
+      assign where host.vars.swap_enabled == true
   - name: users
     type: simple
     definition: |
