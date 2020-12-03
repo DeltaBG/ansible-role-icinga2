@@ -2,7 +2,7 @@
 
 This role is WIP
 
-### Example host_vars when configuring a client: `inventories/icinga2/production/host_vars/client1.yml`
+###### Example host_vars when configuring a client: `inventories/icinga2/production/host_vars/client1.yml`
 
 ```
 ---
