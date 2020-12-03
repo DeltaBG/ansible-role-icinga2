@@ -1,7 +1,21 @@
+object Endpoint "{{ hostvars[item].inventory_hostname }}" {
+        host = "{{ hostvars[item].ansible_host }}"
+}
+
+object Zone "{{ hostvars[item].inventory_hostname }}" {
+        endpoints = [ "{{ hostvars[item].inventory_hostname }}" ]
+        parent = "{{ icinga2_zone_master_endpoint_name }}"
+}
+
 object Host "{{ hostvars[item].inventory_hostname }}" {
   import "generic-host"
-  address = "{{ hostvars[item].ansible_host }}"
   name = "{{ hostvars[item].inventory_hostname }}"
+  vars.agent_endpoint = name
+  address = "{{ hostvars[item].ansible_host }}"
+  {% if hostvars[item].icinga2_client_os is defined %}vars.os = "{{ hostvars[item].icinga2_client_os }}"
+  {% endif %}
+  {% if hostvars[item].icinga2_client_os_family is defined %}vars.os_family = "{{ hostvars[item].icinga2_client_os_family }}"
+  {% endif %}
   {{ hostvars[item].icinga2_host_specific_services|default(icinga2_host_specific_services_defaults) }}
   vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
 }

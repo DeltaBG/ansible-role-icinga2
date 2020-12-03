@@ -1,17 +1,16 @@
 ---
-- name: Create client config dirs
+- name: Ensure zones master endpoint dir is present
   file:
-    path: "{{ icinga2_install_path }}/conf.d/{{ hostvars[item].inventory_hostname }}"
+    path: "{{ icinga2_install_path }}/zones.d/{{ icinga2_zone_master_endpoint_name }}"
     state: directory
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  loop: "{{ groups[icinga2_client_group] }}"
-  tags: configure_clients
+  tags: configure_client
 
 - name: Configure client
   template:
     src: client_config/hosts.conf.j2
-    dest: "{{ icinga2_install_path }}/conf.d/{{ hostvars[item].inventory_hostname }}/host.conf"
+    dest: "{{ icinga2_install_path }}/zones.d/{{ icinga2_zone_master_endpoint_name }}/{{ hostvars[item].inventory_hostname }}.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
   loop: "{{ groups[icinga2_client_group] }}"
