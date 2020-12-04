@@ -197,4 +197,14 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-sql-running"
       assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+  - name: check_rbl
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "rbl"
+
+      command_endpoint = host.vars.agent_endpoint
+
+      assign where host.vars.rbl_enabled == true
 ...
