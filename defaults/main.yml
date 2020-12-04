@@ -149,6 +149,15 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.agent_endpoint
+  - name: iostats
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "iostats"
+
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
   - name: mysql
     type: simple
     definition: |
