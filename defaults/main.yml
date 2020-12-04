@@ -158,4 +158,34 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.mysql_enabled == true
+  - name: mysql_health_slave_replication_lag
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "mysql_health"
+
+      command_endpoint = host.vars.agent_endpoint
+      vars.mysql_health_mode = "slave-lag"
+      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+  - name: mysql_health_slave_io_running
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "mysql_health"
+
+      command_endpoint = host.vars.agent_endpoint
+      vars.mysql_health_mode = "slave-io-running"
+      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+  - name: mysql_health_slave_sql_running
+    type: simple
+    definition: |
+      import "generic-service"
+
+      check_command = "mysql_health"
+
+      command_endpoint = host.vars.agent_endpoint
+      vars.mysql_health_mode = "slave-sql-running"
+      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
 ...
