@@ -1,5 +1,5 @@
 ---
 - name: Import the schema
   shell: "mysql {{ icinga2_mysql_database }} < {{ icinga2_initial_schema_sql }}"
-  notify: restart icinga2
+  notify: restart icinga
 ...

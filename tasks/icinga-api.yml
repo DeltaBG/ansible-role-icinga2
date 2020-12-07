@@ -11,7 +11,7 @@
     dest: "{{ icinga2_install_path }}/features-available/api.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  notify: restart icinga2
+  notify: restart icinga
   when: >
     "'api' in icinga2_enabled_features" and not
     icinga2_installed
@@ -22,7 +22,7 @@
     dest: "{{ icinga2_install_path }}/conf.d/api-users.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  notify: restart icinga2
+  notify: restart icinga
   when: "'api' in icinga2_enabled_features"
 
 - name: Generate TicketSalt for the first time
@@ -37,7 +37,7 @@
     path: "{{ icinga2_install_path }}/constants.conf"
     regexp: "const TicketSalt =.*"
     line: 'const TicketSalt = "{{ icinga2_ticket_salt.stdout }}"'
-  notify: restart icinga2
+  notify: restart icinga
   when: >
     "'api' in icinga2_enabled_features" and not
     icinga2_installed

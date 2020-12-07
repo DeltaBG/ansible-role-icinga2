@@ -8,5 +8,5 @@
   tags:
     - configure
     - configure_services
-  notify: restart icinga2
+  notify: restart icinga
 ...

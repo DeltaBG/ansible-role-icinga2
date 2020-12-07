@@ -5,7 +5,7 @@
     dest: "{{ icinga2_install_path }}/conf.d/services.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  notify: restart icinga2
+  notify: restart icinga
   tags:
     - configure
     - configure_services

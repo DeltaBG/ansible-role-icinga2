@@ -7,7 +7,7 @@
     group: "{{ icinga2_group }}"
     state: link
   loop: "{{ icinga2_enabled_features }}"
-  notify: restart icinga2
+  notify: restart icinga
 
 - name: Configure Icinga2 database access in ido-mysql if present
   template:
@@ -15,6 +15,6 @@
     dest: "{{ icinga2_install_path }}/features-available/ido-mysql.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
-  notify: restart icinga2
+  notify: restart icinga
   when: "'ido-mysql' in icinga2_enabled_features"
 ...

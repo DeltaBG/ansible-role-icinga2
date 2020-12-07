@@ -27,7 +27,7 @@
   when: >
     not graphite_installed.stat.exists and not
     icinga2_installed
-  notify: restart icinga2
+  notify: restart icinga
 
 - name: Set proper permissions on Graphite
   file:
@@ -54,7 +54,7 @@
     dest: "{{ icinga2_web_config_path }}/modules/graphite/config.ini"
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
-  notify: restart icinga2
+  notify: restart icinga
 
 - name: Install Python packages
   package:
