@@ -68,6 +68,14 @@
     - configure
     - configure_services
 
+- name: Configure Icinga2 custom commands
+  include_tasks: icinga2-commands-custom.yml
+  when: >
+    icinga2_custom_plugin_commands is defined
+  tags:
+    - configure
+    - configure_commands
+
 - name: Configure Icinga2 services
   include_tasks: icinga-serices.yml
   tags:
