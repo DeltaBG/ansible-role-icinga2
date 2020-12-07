@@ -185,7 +185,7 @@ icinga2_services_defaults:
       check_command = "mysql"
 
       command_endpoint = host.vars.agent_endpoint
-      assign where host.vars.mysql_enabled == true
+      assign where host.vars.mysql_enabled == true || host.vars.mysql_password
   - name: mysql_health_slave_replication_lag
     type: simple
     definition: |
@@ -195,7 +195,7 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-lag"
-      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+      assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
   - name: mysql_health_slave_io_running
     type: simple
     definition: |
@@ -205,7 +205,7 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-io-running"
-      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+      assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
   - name: mysql_health_slave_sql_running
     type: simple
     definition: |
@@ -215,7 +215,7 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-sql-running"
-      assign where host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true
+      assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
   - name: check_rbl
     type: simple
     definition: |
@@ -232,7 +232,7 @@ icinga2_services_defaults:
       check_command = "raid"
 
       command_endpoint = host.vars.agent_endpoint
-      assign where host.vars.raid_enabled == true
+      assign where host.vars.raid_enabled == true || host.vars.rbl_hostname
   - name: check_smart
     type: array
     array_definition: config in host.vars.smart_disks
