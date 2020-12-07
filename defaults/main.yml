@@ -55,6 +55,18 @@ icinga2_custom_plugin_commands: |
   object CheckCommand "raid" { // Plugin name without 'check_' prefix
     command = [ PluginDir + "/check_raid/check_raid.sh" ]
   }
+  object CheckCommand "ide_smart" { // Plugin name without 'check_' prefix
+    command = [ "sudo", PluginDir + "/additional_plugins/check_ide_smart" ]
+
+    arguments = {
+      "-d" = {
+        value = "$smart_disk$"
+        description = "Select device DEVICE. Note: if the device is specified without this option, any further option will be ignored."
+      }
+    }
+
+    vars.smart_disk = "/dev/sda"
+  }
 
 icinga2_services_defaults:
   - name: ping4
@@ -221,4 +233,14 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.raid_enabled == true
+  - name: check_smart
+    type: array
+    array_definition: config in host.vars.smart_disks
+    definition: |
+      check_command = "ide_smart"
+
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.smart_enabled == true || host.vars.smart_disks
+
+      vars += config
 ...
