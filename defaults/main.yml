@@ -1,5 +1,6 @@
 ---
 icinga2_install_path: /etc/icinga2
+icinga2_shared_path: /usr/share/icinga2
 icinga2_owner: icinga
 icinga2_group: icinga
 icinga2_enabled_features:
@@ -48,6 +49,12 @@ icinga2_nagios_plugins_packages:
   - nagios-plugins-all
 
 icinga2_client_group: [] # override via group_vars or host_vars
+
+# Custom commands
+icinga2_custom_plugin_commands: |
+  object CheckCommand "raid" { // Plugin name without 'check_' prefix
+    command = [ PluginDir + "/check_raid/check_raid.sh" ]
+  }
 
 icinga2_services_defaults:
   - name: ping4
@@ -207,4 +214,11 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
 
       assign where host.vars.rbl_enabled == true
+  - name: check_raid
+    type: simple
+    definition: |
+      check_command = "raid"
+
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.raid_enabled == true
 ...
