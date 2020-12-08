@@ -11,10 +11,11 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
   import "generic-host"
   name = "{{ hostvars[item].inventory_hostname }}"
   vars.agent_endpoint = name
-  {% if hostvars[item].icinga2_client_vars is defined %} {{ hostvars[item].icinga2_client_vars }}
+  {% if hostvars[item].icinga2_client_vars is defined %}
     address = "{{ hostvars[item].ansible_host }}"
     vars.os = "{{ hostvars[item].ansible_system }}"
     vars.os_family = "{{ hostvars[item].ansible_distribution }}"
+    {{ hostvars[item].icinga2_client_vars }}
   {% else %}{{ icinga2_client_vars_defaults }}
     vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
   {% endif %}
