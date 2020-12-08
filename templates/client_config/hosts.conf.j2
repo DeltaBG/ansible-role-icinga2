@@ -11,13 +11,13 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
   import "generic-host"
   name = "{{ hostvars[item].inventory_hostname }}"
   vars.agent_endpoint = name
-  {% if hostvars[item].icinga2_client_custom_vars is defined %} {{ hostvars[item].icinga2_client_custom_vars }}
+  {% if hostvars[item].icinga2_client_vars is defined %} {{ hostvars[item].icinga2_client_vars }}
+    address = "{{ hostvars[item].ansible_host }}"
+      {% if hostvars[item].icinga2_client_os is defined %}vars.os = "{{ hostvars[item].icinga2_client_os }}"
+      {% endif %}
+      {% if hostvars[item].icinga2_client_os_family is defined %}vars.os_family = "{{ hostvars[item].icinga2_client_os_family }}"
+      {% endif %}
+  {% else %}{{ icinga2_client_vars_defaults }}
+    vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
   {% endif %}
-  address = "{{ hostvars[item].ansible_host }}"
-  {% if hostvars[item].icinga2_client_os is defined %}vars.os = "{{ hostvars[item].icinga2_client_os }}"
-  {% endif %}
-  {% if hostvars[item].icinga2_client_os_family is defined %}vars.os_family = "{{ hostvars[item].icinga2_client_os_family }}"
-  {% endif %}
-  {{ hostvars[item].icinga2_host_specific_services|default(icinga2_host_specific_services_defaults) }}
-  vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
 }

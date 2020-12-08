@@ -21,7 +21,7 @@ icinga2_host_specific_services: |
 
 # Individual thresholds are set via vars.
 # Vars defined by generic services can be checked here: https://icinga.com/docs/icinga-2/latest/doc/10-icinga-template-library/
-icinga2_client_custom_vars: |
+icinga2_client_vars: |
   vars.http_enabled = true
   vars.swap_enabled = false
   vars.load_wload1 = 5
