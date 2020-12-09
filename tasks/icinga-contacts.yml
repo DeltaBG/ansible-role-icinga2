@@ -1,0 +1,12 @@
+---
+- name: Configure Icinga2 contacts and contactgroups
+  template:
+    src: contact_config/users.conf.j2
+    dest: "{{ icinga2_install_path }}/conf.d/users.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  notify: reload icinga
+  tags:
+    - configure
+    - configure_contacts
+...

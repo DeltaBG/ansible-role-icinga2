@@ -50,6 +50,25 @@ icinga2_nagios_plugins_packages:
 
 icinga2_client_group: [] # override via group_vars or host_vars
 
+icinga2_contacts_and_groups: |
+  /**
+   * The example user 'icingaadmin' and the example
+   * group 'icingaadmins'.
+   */
+
+  object User "icingaadmin" {
+    import "generic-user"
+
+    display_name = "Icinga 2 Admin"
+    groups = [ "icingaadmins" ]
+
+    email = "icinga@localhost"
+  }
+
+  object UserGroup "icingaadmins" {
+    display_name = "Icinga 2 Admin Group"
+  }
+
 # Custom commands
 icinga2_custom_plugin_commands: |
   object CheckCommand "raid" { // Plugin name without 'check_' prefix
