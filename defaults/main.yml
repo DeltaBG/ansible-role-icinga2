@@ -251,4 +251,36 @@ icinga2_services_defaults:
       assign where host.vars.smart_enabled == true || host.vars.smart_disks
 
       vars += config
+
+icinga2_service_groups: |
+  object ServiceGroup "raid" {
+    display_name = "RAID Checks"
+
+    assign where match("raid*", service.check_command)
+  }
+  object ServiceGroup "SMART" {
+    display_name = "SMART Checks"
+
+    assign where match("smart*", service.check_command)
+  }
+  object ServiceGroup "MySQL" {
+    display_name = "MySQL Checks"
+
+    assign where match("mysql*", service.check_command)
+  }
+  object ServiceGroup "MySQL Slaves" {
+    display_name = "MySQL Slave Checks"
+
+    assign where match("mysql_health*", service.check_command)
+  }
+  object ServiceGroup "load" {
+    display_name = "Load Checks"
+
+    assign where match("load*", service.check_command)
+  }
+  object ServiceGroup "iostats" {
+    display_name = "IOstats Checks"
+
+    assign where match("iostats*", service.check_command)
+  }
 ...

@@ -9,4 +9,14 @@
   tags:
     - configure
     - configure_services
+
+- name: Configure Icinga2 service groups
+  blockinfile:
+    block: "{{ icinga2_service_groups }}"
+    path: "{{ icinga2_install_path }}/conf.d/groups.conf"
+    state: present
+  notify: reload icinga
+  tags:
+    - configure
+    - configure_commands 
 ...
