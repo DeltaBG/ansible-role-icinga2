@@ -1,5 +1,5 @@
 ---
-- name: Configure custom services
+- name: Configure Icinga2 custom services
   blockinfile:
     block: "{{ icinga2_custom_plugin_commands }}"
     path: "{{ icinga2_shared_path }}/include/command-plugins.conf"
