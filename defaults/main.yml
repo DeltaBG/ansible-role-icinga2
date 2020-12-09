@@ -261,7 +261,7 @@ icinga2_service_groups: |
   object ServiceGroup "SMART" {
     display_name = "SMART Checks"
 
-    assign where match("smart*", service.check_command)
+    assign where match("*smart*", service.check_command)
   }
   object ServiceGroup "MySQL" {
     display_name = "MySQL Checks"
