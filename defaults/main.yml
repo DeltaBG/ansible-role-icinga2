@@ -86,6 +86,23 @@ icinga2_custom_plugin_commands: |
 
     vars.smart_disk = "/dev/sda"
   }
+  object CheckCommand "smart_pl" { // Plugin name without 'check_' prefix
+    command = [ "sudo", PluginDir + "/check_smart" ]
+    
+    arguments = {
+      "-d" = {
+        value = "$smart_disk$"
+        description = "a physical block device to be SMART monitored"
+      }
+      "-i" = {
+        value = "$smart_type$"
+        description = "device's interface type (auto|ata|scsi|nvme|3ware,N|areca,N|hpt,L/M/N|cciss,N|megaraid,N)"
+      }
+    }
+
+    vars.smart_disk = "/dev/sda"
+    vars.smart_type = "sat"
+  }
 
 icinga2_client_vars_defaults: |
   vars.disks["disk /"] = {
@@ -260,6 +277,16 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.raid_enabled == true || host.vars.rbl_hostname
+  - name: check_smart_pl
+    type: array
+    array_definition: config in host.vars.smart_devices
+    definition: |
+      check_command = "smart_pl"
+
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.smart_enabled == true || host.vars.smart_devices
+
+      vars += config
   - name: check_smart
     type: array
     array_definition: config in host.vars.smart_disks
