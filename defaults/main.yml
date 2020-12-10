@@ -351,6 +351,11 @@ icinga2_service_groups: |
 
     assign where match("*smart*", service.check_command)
   }
+  object ServiceGroup "IPMI" {
+    display_name = "IPMI Sensor Checks"
+
+    assign where match("*ipmi_sensor*", service.check_command)
+  }
   object ServiceGroup "MySQL" {
     display_name = "MySQL Checks"
 
@@ -371,6 +376,7 @@ icinga2_service_groups: |
 
     assign where match("iostats*", service.check_command)
   }
+
 
 icinga2_templates: |
   /*
