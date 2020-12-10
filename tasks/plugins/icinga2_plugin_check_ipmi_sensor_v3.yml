@@ -1,0 +1,67 @@
+---
+- name: Check if check_ipmi_sensor_v3 plugin has been already installed
+  stat:
+    path: "{{ icinga2_nagios_plugins_install_dir }}/check_ipmi_sensor/check_ipmi_sensor"
+  register: icinga2_check_ipmi_sensor_chk
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Install check_ipmi_sensor_v3 plugin prerequisites
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - freeipmi
+  when: not icinga2_check_ipmi_sensor_chk.stat.exists
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Install check_ipmi_sensor_v3 perl modules
+  cpanm:
+    name: "{{ item }}"
+  loop:
+      - IPC::Run
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Download check_ipmi_sensor_v3 archive
+  get_url:
+    url: "{{ icinga2_check_ipmi_sensor_v3_download_url }}"
+    dest: /tmp/
+  when: not icinga2_check_ipmi_sensor_chk.stat.exists
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Unpack check_ipmi_sensor_v3 archive
+  unarchive:
+    src: "/tmp/check_ipmi_sensor_v3-{{ icinga2_check_ipmi_sensor_v3_version }}.tar.gz"
+    dest: /tmp/
+    remote_src: yes
+  when: not icinga2_check_ipmi_sensor_chk.stat.exists
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Create check_ipmi_sensor_v3 plugin dir
+  file:
+    path: "{{ icinga2_nagios_plugins_install_dir }}/check_ipmi_sensor"
+    state: directory
+  when: not icinga2_check_ipmi_sensor_chk.stat.exists
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+
+- name: Copy check_ipmi_sensor_v3 to final destination
+  copy:
+    src: "/tmp/check_ipmi_sensor_v3-{{ icinga2_check_ipmi_sensor_v3_version }}/"
+    dest: "{{ icinga2_nagios_plugins_install_dir }}/check_ipmi_sensor"
+    remote_src: yes
+  when: not icinga2_check_ipmi_sensor_chk.stat.exists
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+...

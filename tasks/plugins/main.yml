@@ -1,0 +1,13 @@
+---
+- name: Include tasks for Icinga2 plugin prerequisites
+  include_tasks: plugins/icinga2_nagios_plugins_prerequisites.yml
+  when: not icinga2_installed
+  tags: 
+    - configure
+
+- name: Include tasks for installing check_ipmi_sensor_v3
+  include_tasks: plugins/icinga2_plugin_check_ipmi_sensor_v3.yml
+  tags:
+    - configure
+    - configure_check_ipmi_sensor_v3
+...

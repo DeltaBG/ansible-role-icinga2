@@ -44,6 +44,20 @@ icinga2_graphite_migration_script_download_url: https://raw.githubusercontent.co
 
 icinga2_zone_master_endpoint_name: "master"
 
+## Vars related to Nagios plugins located on Icinga2 master
+icinga2_nagios_plugins_install_dir: /usr/lib64/nagios/plugins
+icinga2_package_prerequisites:
+  - smartmontools
+  - perl
+  - perl-App-cpanminus
+  - perl-Module-Install
+  - gcc
+  - make
+
+icinga2_check_ipmi_sensor_v3_version: 3.13
+icinga2_check_ipmi_sensor_v3_download_url: https://github.com/thomas-krenn/check_ipmi_sensor_v3/archive/v{{ icinga2_check_ipmi_sensor_v3_version }}.tar.gz
+##
+
 icinga2_nagios_plugins_packages:
   - perl-utf8-all
   - nagios-plugins-all
@@ -102,6 +116,28 @@ icinga2_custom_plugin_commands: |
 
     vars.smart_disk = "/dev/sda"
     vars.smart_type = "sat"
+  }
+  object CheckCommand "ipmi_sensor" { // Plugin name without 'check_' prefix
+    command = [ PluginDir + "/check_ipmi_sensor/check_ipmi_sensor" ]
+    
+    arguments = {
+      "-H" = {
+        value = "$ipmi_sensor_hostname$"
+        description = "hostname or IP of the IPMI interface."
+      }
+      "-U" = {
+        value = "$ipmi_sensor_username$"
+        description = "IPMI username"
+      }
+      "-P" = {
+        value = "$ipmi_sensor_password$"
+        description = "IPMI password"
+      }
+      "-L" = {
+        value = "$ipmi_sensor_privilege_level$"
+        description = "IPMI privilege level"
+      }
+    }
   }
 
 icinga2_client_vars_defaults: |
@@ -297,6 +333,12 @@ icinga2_services_defaults:
       assign where host.vars.smart_enabled == true || host.vars.smart_disks
 
       vars += config
+  - name: ipmi_sensor
+    type: simple
+    definition: |
+      check_command = "ipmi_sensor"
+
+      assign where host.vars.ipmi_sensor_enabled == true
 
 icinga2_service_groups: |
   object ServiceGroup "raid" {
