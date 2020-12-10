@@ -1,0 +1,6 @@
+---
+collections:
+  - name: https://github.com/mlg1/ansible-collection-extended_facts.git
+    type: git
+    version: master
+...
