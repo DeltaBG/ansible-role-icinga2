@@ -312,7 +312,7 @@ icinga2_services_defaults:
       check_command = "raid"
 
       command_endpoint = host.vars.agent_endpoint
-      assign where host.vars.raid_enabled == true || host.vars.rbl_hostname
+      assign where host.vars.raid_enabled == true
   - name: check_smart_pl
     type: array
     array_definition: config in host.vars.smart_devices
