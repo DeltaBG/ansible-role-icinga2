@@ -16,6 +16,20 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
     vars.os = "{{ hostvars[item].ansible_system }}"
     vars.os_family = "{{ hostvars[item].ansible_distribution }}"
     {{ hostvars[item].icinga2_client_vars }}
+
+    {% if hostvars[item].ansible_facts.smartctl is defined and hostvars[item].ansible_facts.smartctl|length>0 %}
+      {% for device in hostvars[item].ansible_facts.smartctl.devices %}
+          vars.smart_devices["smart_device {{ device.name }}"] = {
+            smart_device = "{{ device.device }}"
+            smart_type = "{{ device.type }}"
+          }
+      {% endfor %}
+    {% endif %}
+
+    {% if hostvars[item].ansible_facts.raid is defined and hostvars[item].ansible_facts.raid|length>0 %}
+      vars.raid_enabled = true
+    {% endif %}
+
   {% else %}{{ icinga2_client_vars_defaults }}
     vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
   {% endif %}
