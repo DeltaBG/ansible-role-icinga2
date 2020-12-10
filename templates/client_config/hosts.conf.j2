@@ -17,6 +17,13 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
     vars.os_family = "{{ hostvars[item].ansible_distribution }}"
     {{ hostvars[item].icinga2_client_vars }}
 
+    {% if hostvars[item].ansible_facts.swaptotal_mb is defined and hostvars[item].ansible_facts.swaptotal_mb>0 %}
+
+      vars.swap_enabled = true
+    {% else %}
+      vars.swap_enabled = false
+    {% endif %}
+
     {% if hostvars[item].ansible_facts.processor_vcpus is defined %}
 
       vars.load_wload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.5)|int }}
