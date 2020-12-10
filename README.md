@@ -1,6 +1,9 @@
 # Ansible role for installing Icinga2 master
 
-This role is WIP
+## Requirements
+
+This role depends on the extra plugin https://github.com/mlg1/ansible-collection-extended_facts.git.
+Run `ansible-galaxy install -r vdzhorov.icinga2/requirements.yml` before using this role.
 
 ##### Example host_vars when configuring a client: `inventories/icinga2/production/host_vars/client1.yml`
 
