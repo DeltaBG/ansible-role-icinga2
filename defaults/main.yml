@@ -248,15 +248,6 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.agent_endpoint
-  - name: iostats
-    type: simple
-    definition: |
-      import "generic-service"
-
-      check_command = "iostats"
-
-      command_endpoint = host.vars.agent_endpoint
-      assign where host.vars.agent_endpoint
   - name: mysql
     type: simple
     definition: |
@@ -339,6 +330,18 @@ icinga2_services_defaults:
       check_command = "ipmi_sensor"
 
       assign where host.vars.ipmi_sensor_enabled == true
+  - name: iostats
+    type: array
+    array_definition: config in host.vars.iostats_disks
+    definition: |
+      import "generic-service"
+
+      check_command = "iostats"
+
+      command_endpoint = host.vars.agent_endpoint
+      assign where host.vars.agent_endpoint
+
+      vars += config
 
 icinga2_service_groups: |
   object ServiceGroup "raid" {
