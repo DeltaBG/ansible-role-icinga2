@@ -88,6 +88,12 @@
     - configure
     - configure_contacts
 
+- name: Include tasks for configuring Icinga2 templates
+  include_tasks: icinga-templates.yml
+  tags:
+    - configure
+    - configure_templates
+
 - name: Configure Icinga2 clients
   include_tasks: icinga-clients.yml
   when: >

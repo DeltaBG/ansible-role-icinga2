@@ -1,0 +1,12 @@
+---
+- name: Configure Icinga2 templates
+  template:
+    src: templates/templates.conf.j2
+    dest: "{{ icinga2_install_path }}/conf.d/templates.conf"
+    owner: "{{ icinga2_owner }}"
+    group: "{{ icinga2_group }}"
+  notify: reload icinga
+  tags:
+    - configure
+    - configure_templates
+...
