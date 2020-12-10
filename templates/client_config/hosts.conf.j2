@@ -17,6 +17,16 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
     vars.os_family = "{{ hostvars[item].ansible_distribution }}"
     {{ hostvars[item].icinga2_client_vars }}
 
+    {% if hostvars[item].ansible_facts.processor_vcpus is defined %}
+
+      vars.load_wload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.5)|int }}
+      vars.load_wload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.4)|int }}
+      vars.load_wload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.3)|int }}
+      vars.load_cload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 2)|int }}
+      vars.load_cload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.9)|int }}
+      vars.load_cload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.8)|int }}
+    {% endif %}
+
     {% if hostvars[item].ansible_facts.smartctl is defined and hostvars[item].ansible_facts.smartctl|length>0 %}
       {% for device in hostvars[item].ansible_facts.smartctl.devices %}
           vars.smart_devices["smart_device {{ device.name }}"] = {
