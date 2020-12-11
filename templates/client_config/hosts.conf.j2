@@ -62,6 +62,18 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
             smart_device = "{{ device.device }}"
             smart_type = "{{ device.type }}"
           }
+
+      {% endfor %}
+    {% endif %}
+
+    {% if hostvars[item].ansible_facts.all_ipv4_addresses is defined and hostvars[item].ansible_facts.all_ipv4_addresses|length>0 %}
+
+      {% for ip in hostvars[item].ansible_facts.all_ipv4_addresses|ansible.netcommon.ipaddr('public') %}
+        vars.rbl_hostnames["RBL check for {{ ip }}"] = {
+          rbl_hostname = "{{ ip }}"
+          rbl_server = ["sbl.spamhaus.org", "xbl.spamhaus.org", "zen.spamhaus.org", "dun.dnsrbl.net", "bl.spamcop.net"]
+        }
+
       {% endfor %}
     {% endif %}
 

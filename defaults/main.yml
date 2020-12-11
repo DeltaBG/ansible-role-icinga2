@@ -288,7 +288,8 @@ icinga2_services_defaults:
       vars.mysql_health_mode = "slave-sql-running"
       assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
   - name: check_rbl
-    type: simple
+    type: array
+    array_definition: config in host.vars.rbl_hostnames
     definition: |
       import "generic-service"
 
@@ -296,7 +297,9 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
 
-      assign where host.vars.rbl_enabled == true
+      assign where host.vars.agent_endpoint
+
+      vars += config
   - name: check_raid
     type: simple
     definition: |
