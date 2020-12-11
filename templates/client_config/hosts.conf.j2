@@ -81,6 +81,13 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
       vars.raid_enabled = true
     {% endif %}
 
+    {% if hostvars[item].ansible_facts.mysql is defined and hostvars[item].ansible_facts.mysql|length>0 %}
+
+        vars.mysql_username = "{{ icinga2_mysql_monitoring_user }}"
+        vars.mysql_hostname = "localhost"
+        vars.mysql_password = "{{ icinga2_mysql_monitoring_password }}"
+    {% endif %}
+
   {% else %}{{ icinga2_client_vars_defaults }}
     vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
   {% endif %}
