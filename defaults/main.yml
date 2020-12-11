@@ -44,6 +44,9 @@ icinga2_graphite_migration_script_download_url: https://raw.githubusercontent.co
 
 icinga2_zone_master_endpoint_name: "master"
 
+icinga2_mysql_monitoring_user: icinga2_monitoring
+icinga2_mysql_monitoring_password: icinga2_monitoring_password
+
 ## Vars related to Nagios plugins located on Icinga2 master
 icinga2_nagios_plugins_install_dir: /usr/lib64/nagios/plugins
 icinga2_package_prerequisites:
@@ -257,6 +260,7 @@ icinga2_services_defaults:
 
       command_endpoint = host.vars.agent_endpoint
       assign where host.vars.mysql_enabled == true || host.vars.mysql_password
+      ignore where host.vars.mysql_disabled == true
   - name: mysql_health_slave_replication_lag
     type: simple
     definition: |
@@ -267,6 +271,7 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-lag"
       assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
+      ignore where host.vars.mysql_disabled == true
   - name: mysql_health_slave_io_running
     type: simple
     definition: |
@@ -277,6 +282,7 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-io-running"
       assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
+      ignore where host.vars.mysql_disabled == true
   - name: mysql_health_slave_sql_running
     type: simple
     definition: |
@@ -287,6 +293,7 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
       vars.mysql_health_mode = "slave-sql-running"
       assign where (host.vars.mysql_enabled == true && host.vars.mysql_slave_enabled == true) || (host.vars.mysql_health_password && host.vars.mysql_slave_enabled == true)
+      ignore where host.vars.mysql_disabled == true
   - name: check_rbl
     type: array
     array_definition: config in host.vars.rbl_hostnames
