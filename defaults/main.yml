@@ -366,7 +366,7 @@ icinga2_service_groups: |
   object ServiceGroup "MySQL" {
     display_name = "MySQL Checks"
 
-    assign where match("mysql*", service.check_command)
+    assign where match("mysql", service.check_command)
   }
   object ServiceGroup "MySQL Slaves" {
     display_name = "MySQL Slave Checks"
