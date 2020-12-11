@@ -298,6 +298,7 @@ icinga2_services_defaults:
       command_endpoint = host.vars.agent_endpoint
 
       assign where host.vars.agent_endpoint
+      ignore where host.vars.rbl_disabled == true
 
       vars += config
   - name: check_raid
