@@ -30,9 +30,9 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
     {% if hostvars[item].ansible_devices.keys()|list is defined and hostvars[item].ansible_devices.keys()|list|length>0 %}
       {% for disk in hostvars[item].ansible_devices.keys()|list %}
         {% if "sr" not in disk %}
-        
+
             vars.iostats_disks["iostat on {{ disk }}"] = {
-              vars.iostats_disk = "{{ disk }}"
+              iostats_disk = "{{ disk }}"
           }
         {% endif %}     
       {% endfor %}
