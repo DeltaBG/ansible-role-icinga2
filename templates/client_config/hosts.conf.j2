@@ -86,6 +86,9 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
         vars.mysql_username = "{{ icinga2_mysql_monitoring_user }}"
         vars.mysql_hostname = "localhost"
         vars.mysql_password = "{{ icinga2_mysql_monitoring_password }}"
+        vars.mysql_health_username = "{{ icinga2_mysql_monitoring_user }}"
+        vars.mysql_health_hostname = "localhost"
+        vars.mysql_health_password = "{{ icinga2_mysql_monitoring_password }}"
     {% endif %}
 
   {% else %}{{ icinga2_client_vars_defaults }}
