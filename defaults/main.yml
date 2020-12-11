@@ -372,6 +372,11 @@ icinga2_service_groups: |
 
     assign where match("mysql_health*", service.check_command)
   }
+  object ServiceGroup "RBL" {
+    display_name = "RBL Checks"
+
+    assign where match("rbl*", service.check_command)
+  }
   object ServiceGroup "load" {
     display_name = "Load Checks"
 
