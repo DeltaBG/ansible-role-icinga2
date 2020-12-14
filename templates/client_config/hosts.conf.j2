@@ -12,86 +12,85 @@ object Host "{{ hostvars[item].inventory_hostname }}" {
   name = "{{ hostvars[item].inventory_hostname }}"
   vars.agent_endpoint = name
   {% if hostvars[item].icinga2_client_vars is defined %}
-    address = "{{ hostvars[item].ansible_host }}"
-    vars.os = "{{ hostvars[item].ansible_system }}"
-    vars.os_family = "{{ hostvars[item].ansible_distribution }}"
     {{ hostvars[item].icinga2_client_vars }}
-
-    {% if hostvars[item].ansible_facts.mounts is defined and hostvars[item].ansible_facts.mounts|length>0 %}
-
-      {% for mount in hostvars[item].ansible_facts.mounts %}
-        vars.disks["disk {{ mount.mount }}"] = {
-          disk_partitions = "{{ mount.mount }}"
-        }
-
-      {% endfor %}
-    {% endif %}
-
-    {% if hostvars[item].ansible_devices.keys()|list is defined and hostvars[item].ansible_devices.keys()|list|length>0 %}
-      {% for disk in hostvars[item].ansible_devices.keys()|list %}
-        {% if "sr" not in disk %}
-
-            vars.iostats_disks["iostat on {{ disk }}"] = {
-              iostats_disk = "{{ disk }}"
-          }
-        {% endif %}     
-      {% endfor %}
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.swaptotal_mb is defined and hostvars[item].ansible_facts.swaptotal_mb>0 %}
-
-      vars.swap_enabled = true
-    {% else %}
-      vars.swap_enabled = false
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.processor_vcpus is defined %}
-
-      vars.load_wload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.5)|int }}
-      vars.load_wload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.4)|int }}
-      vars.load_wload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.3)|int }}
-      vars.load_cload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 2)|int }}
-      vars.load_cload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.9)|int }}
-      vars.load_cload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.8)|int }}
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.smartctl is defined and hostvars[item].ansible_facts.smartctl|length>0 %}
-
-      {% for device in hostvars[item].ansible_facts.smartctl.devices %}
-          vars.smart_devices["smart_device {{ device.name }}"] = {
-            smart_device = "{{ device.device }}"
-            smart_type = "{{ device.type }}"
-          }
-
-      {% endfor %}
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.all_ipv4_addresses is defined and hostvars[item].ansible_facts.all_ipv4_addresses|length>0 %}
-
-      {% for ip in hostvars[item].ansible_facts.all_ipv4_addresses|ansible.netcommon.ipaddr('public') %}
-        vars.rbl_hostnames["RBL check for {{ ip }}"] = {
-          rbl_hostname = "{{ ip }}"
-          rbl_server = ["sbl.spamhaus.org", "xbl.spamhaus.org", "zen.spamhaus.org", "dun.dnsrbl.net", "bl.spamcop.net"]
-        }
-
-      {% endfor %}
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.raid is defined and hostvars[item].ansible_facts.raid|length>0 %}
-      vars.raid_enabled = true
-    {% endif %}
-
-    {% if hostvars[item].ansible_facts.mysql is defined and hostvars[item].ansible_facts.mysql|length>0 %}
-
-        vars.mysql_username = "{{ icinga2_mysql_monitoring_user }}"
-        vars.mysql_hostname = "localhost"
-        vars.mysql_password = "{{ icinga2_mysql_monitoring_password }}"
-        vars.mysql_health_username = "{{ icinga2_mysql_monitoring_user }}"
-        vars.mysql_health_hostname = "localhost"
-        vars.mysql_health_password = "{{ icinga2_mysql_monitoring_password }}"
-    {% endif %}
-
   {% else %}{{ icinga2_client_vars_defaults }}
     vars.client_endpoint = "{{ hostvars[item].inventory_hostname }}"
+  {% endif %}
+  address = "{{ hostvars[item].ansible_host }}"
+  vars.os = "{{ hostvars[item].ansible_system }}"
+  vars.os_family = "{{ hostvars[item].ansible_distribution }}"
+  
+  {% if hostvars[item].ansible_facts.mounts is defined and hostvars[item].ansible_facts.mounts|length>0 %}
+
+    {% for mount in hostvars[item].ansible_facts.mounts %}
+      vars.disks["disk {{ mount.mount }}"] = {
+        disk_partitions = "{{ mount.mount }}"
+      }
+
+    {% endfor %}
+  {% endif %}
+
+  {% if hostvars[item].ansible_devices.keys()|list is defined and hostvars[item].ansible_devices.keys()|list|length>0 %}
+    {% for disk in hostvars[item].ansible_devices.keys()|list %}
+      {% if "sr" not in disk %}
+
+          vars.iostats_disks["iostat on {{ disk }}"] = {
+            iostats_disk = "{{ disk }}"
+        }
+      {% endif %}     
+    {% endfor %}
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.swaptotal_mb is defined and hostvars[item].ansible_facts.swaptotal_mb>0 %}
+
+    vars.swap_enabled = true
+  {% else %}
+    vars.swap_enabled = false
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.processor_vcpus is defined %}
+
+    vars.load_wload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.5)|int }}
+    vars.load_wload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.4)|int }}
+    vars.load_wload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.3)|int }}
+    vars.load_cload1 = {{ (hostvars[item].ansible_facts.processor_vcpus * 2)|int }}
+    vars.load_cload5 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.9)|int }}
+    vars.load_cload15 = {{ (hostvars[item].ansible_facts.processor_vcpus * 1.8)|int }}
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.smartctl is defined and hostvars[item].ansible_facts.smartctl|length>0 %}
+
+    {% for device in hostvars[item].ansible_facts.smartctl.devices %}
+        vars.smart_devices["smart_device {{ device.name }}"] = {
+          smart_device = "{{ device.device }}"
+          smart_type = "{{ device.type }}"
+        }
+
+    {% endfor %}
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.all_ipv4_addresses is defined and hostvars[item].ansible_facts.all_ipv4_addresses|length>0 %}
+
+    {% for ip in hostvars[item].ansible_facts.all_ipv4_addresses|ansible.netcommon.ipaddr('public') %}
+      vars.rbl_hostnames["RBL check for {{ ip }}"] = {
+        rbl_hostname = "{{ ip }}"
+        rbl_server = ["sbl.spamhaus.org", "xbl.spamhaus.org", "zen.spamhaus.org", "dun.dnsrbl.net", "bl.spamcop.net"]
+      }
+
+    {% endfor %}
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.raid is defined and hostvars[item].ansible_facts.raid|length>0 %}
+    vars.raid_enabled = true
+  {% endif %}
+
+  {% if hostvars[item].ansible_facts.mysql is defined and hostvars[item].ansible_facts.mysql|length>0 %}
+
+      vars.mysql_username = "{{ icinga2_mysql_monitoring_user }}"
+      vars.mysql_hostname = "localhost"
+      vars.mysql_password = "{{ icinga2_mysql_monitoring_password }}"
+      vars.mysql_health_username = "{{ icinga2_mysql_monitoring_user }}"
+      vars.mysql_health_hostname = "localhost"
+      vars.mysql_health_password = "{{ icinga2_mysql_monitoring_password }}"
   {% endif %}
 }
