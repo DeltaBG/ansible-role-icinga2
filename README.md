@@ -3,23 +3,29 @@
 ## Requirements
 
 This role depends on the extra plugin https://github.com/mlg1/ansible-collection-extended_facts.git.
-Run `ansible-galaxy install -r vdzhorov.icinga2/requirements.yml` before using this role.
+Run `ansible-galaxy install -r DeltaBG.icinga2/requirements.yml` before using this role.
 
 ##### Example playbook `playbooks/icinga2-all.yml`
 
 ```
 - name: Gather facts from clients
   hosts: icinga_clients
+  pre_tasks:
+    - name: Ensure smartmontools is present
+      package:
+        name: smartmontools
+        state: present
+      tags: configure
   tasks:
     - mlg1.extended_facts.extended_facts:
       tags: configure
 
-- name: Configure clients on Icinga2 master
+- name: Configure and install Icinga2 master
   hosts: icinga
   roles:
     - ansible-role-icinga2
 
-- name: Install Icinga2 on clients
+- name: Configure and install Icinga2 on clients
   gather_facts: no
   hosts: icinga_clients
   roles:
