@@ -118,7 +118,7 @@
     group: "{{ icinga2_web_group }}"
   when: not icinga2_installed
 
-- name: Run migration script
+- name: Run migration script # noqa 305
   shell: "python3 ./manage.py migrate"
   args:
     chdir: "{{ icinga2_graphite_install_dir }}/webapp/"

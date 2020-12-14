@@ -1,5 +1,5 @@
 ---
-- name: Setup Icinga2 api if enabled
+- name: Setup Icinga2 api if enabled # noqa 305
   shell: icinga2 api setup
   when: >
     "'api' in icinga2_enabled_features" and not
@@ -27,7 +27,7 @@
   notify: restart icinga
   when: "'api' in icinga2_enabled_features"
 
-- name: Generate TicketSalt for the first time
+- name: Generate TicketSalt for the first time # noqa 305
   shell: openssl rand -base64 30
   register: icinga2_ticket_salt
   when: >

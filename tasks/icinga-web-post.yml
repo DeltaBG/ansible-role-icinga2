@@ -27,7 +27,7 @@
     mode: 0755
   when: not icinga2_installed
 
-- name: Generate Icinga2 setup token
+- name: Generate Icinga2 setup token # noqa 305
   shell: icingacli setup token create
   register: icinga2_setup_token
   when: not icinga2_installed

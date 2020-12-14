@@ -15,13 +15,13 @@
   tags:
     - configure
 
-- set_fact:
+- set_fact: # noqa 502
     icinga2_installed: True
   when: icinga2_install_chk.stat.exists
   tags:
     - configure
 
-- set_fact:
+- set_fact: # noqa 502
     icinga2_installed: False
   when: not icinga2_install_chk.stat.exists
   tags:

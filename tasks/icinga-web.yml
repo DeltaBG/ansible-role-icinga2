@@ -17,7 +17,7 @@
     state: started
     enabled: yes
 
-- name: Configure Icinga2 web server (Apache)
+- name: Configure Icinga2 web server (Apache) # noqa 305
   shell: icingacli setup config webserver apache
   when: >
     "icinga2_web_server == 'apache'" and not
