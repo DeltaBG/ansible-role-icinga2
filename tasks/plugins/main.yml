@@ -10,4 +10,10 @@
   tags:
     - configure
     - configure_check_ipmi_sensor_v3
+
+- name: Install Nagios plugins
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ icinga2_nagios_plugins_packages }}"
 ...

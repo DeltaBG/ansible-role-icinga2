@@ -21,17 +21,4 @@
     name: icinga2
     enabled: yes
     state: started
-
-- name: Enable PowerTools repo # noqa 305
-  shell: dnf config-manager --set-enabled PowerTools
-  when: >
-    ansible_os_family == "RedHat" and
-    ansible_distribution_major_version == "8"
-  changed_when: False
-
-- name: Install Nagios plugins
-  package:
-    name: "{{ item }}"
-    state: present
-  loop: "{{ icinga2_nagios_plugins_packages }}"
 ...
