@@ -6,12 +6,14 @@
     recurse: yes
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   when: not icinga2_installed
 
 - name: Configure Graphite web
   template:
     src: web/graphite-web.conf.j2
     dest: /etc/httpd/conf.d/graphite-web.conf
+    mode: 0755
   when: >
     "icinga2_web_server == 'apache'"
   notify: restart httpd
@@ -22,6 +24,7 @@
     dest: "{{ icinga2_web_config_path }}/resources.ini"
     owner: "{{ icinga2_web_server }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   when: not icinga2_installed
 
 - name: Generate Icinga2 setup token
@@ -34,6 +37,7 @@
     path: "{{ icinga2_web_config_path }}/setup.token"
     owner: "{{ icinga2_web_server }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   when: not icinga2_installed
 
 - debug:

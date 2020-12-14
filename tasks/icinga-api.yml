@@ -11,6 +11,7 @@
     dest: "{{ icinga2_install_path }}/features-available/api.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
+    mode: 0755
   notify: restart icinga
   when: >
     "'api' in icinga2_enabled_features" and not
@@ -22,6 +23,7 @@
     dest: "{{ icinga2_install_path }}/conf.d/api-users.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
+    mode: 0755
   notify: restart icinga
   when: "'api' in icinga2_enabled_features"
 

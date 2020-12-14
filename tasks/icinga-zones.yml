@@ -5,6 +5,7 @@
     dest: "{{ icinga2_install_path }}/zones.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
+    mode: 0755
   tags:
     - configure
     - configure_services

@@ -103,7 +103,7 @@
 - name: Configure Icinga2 clients
   include_tasks: icinga-clients.yml
   when: >
-    icinga2_client_group is defined and 
+    icinga2_client_group is defined and
     (groups[icinga2_client_group]|length>0)
   tags:
     - configure

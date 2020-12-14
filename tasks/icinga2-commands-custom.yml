@@ -7,5 +7,5 @@
   notify: reload icinga
   tags:
     - configure
-    - configure_commands  
+    - configure_commands
 ...

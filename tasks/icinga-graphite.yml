@@ -16,6 +16,7 @@
     state: directory
     owner: "{{ icinga2_graphite_owner }}"
     group: "{{ icinga2_graphite_group }}"
+    mode: 0755
   when: >
     not graphite_installed.stat.exists and not
     icinga2_installed
@@ -24,6 +25,7 @@
   git:
     repo: "{{ icinga2_graphite_download_url }}"
     dest: "{{ icinga2_web_install_path }}/modules/graphite"
+    version: "{{ icinga2_graphite_version }}"
   when: >
     not graphite_installed.stat.exists and not
     icinga2_installed
@@ -36,6 +38,7 @@
     recurse: yes
     owner: "{{ icinga2_graphite_owner }}"
     group: "{{ icinga2_graphite_group }}"
+    mode: 0755
   when: not icinga2_installed
 
 - name: Create Graphite module config directory
@@ -44,6 +47,7 @@
     state: directory
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   when: >
     not graphite_installed.stat.exists and not
     icinga2_installed
@@ -54,6 +58,7 @@
     dest: "{{ icinga2_web_config_path }}/modules/graphite/config.ini"
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   notify: restart icinga
 
 - name: Install Python packages
@@ -87,12 +92,14 @@
   template:
     src: graphite/carbon.conf.j2
     dest: "{{ icinga2_graphite_conf_dir }}/carbon.conf"
+    mode: 0755
   notify: restart cabon-cache
 
 - name: Configure storage-schemas
   template:
     src: graphite/storage-schemas.conf.j2
     dest: "{{ icinga2_graphite_conf_dir }}/storage-schemas.conf"
+    mode: 0755
   notify: restart cabon-cache
 
 - name: Configure init script
@@ -124,6 +131,7 @@
     recurse: yes
     owner: "{{ icinga2_web_owner }}"
     group: "{{ icinga2_web_group }}"
+    mode: 0755
   when: >
     "icinga2_web_server == 'apache'" and not
     icinga2_installed

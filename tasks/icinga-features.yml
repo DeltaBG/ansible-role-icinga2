@@ -6,6 +6,7 @@
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
     state: link
+    mode: 0755
   loop: "{{ icinga2_enabled_features }}"
   notify: restart icinga
 
@@ -15,6 +16,7 @@
     dest: "{{ icinga2_install_path }}/features-available/ido-mysql.conf"
     owner: "{{ icinga2_owner }}"
     group: "{{ icinga2_group }}"
+    mode: 0755
   notify: restart icinga
   when: "'ido-mysql' in icinga2_enabled_features"
 ...
