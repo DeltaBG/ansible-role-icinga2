@@ -2,7 +2,7 @@
 
 ## Requirements
 
-This role depends on the extra plugin https://github.com/mlg1/ansible-collection-extended_facts.git.
+This role depends on the extra plugin from `Galaxy deltabg.extended_facts`.
 Run `ansible-galaxy install -r DeltaBG.icinga2/requirements.yml` before using this role.
 
 ##### Example playbook `playbooks/icinga2-all.yml`
