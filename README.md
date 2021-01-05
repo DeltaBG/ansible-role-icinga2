@@ -1,13 +1,33 @@
-# Ansible role for installing Icinga2 master
+# Ansible role for installing and configuring Icinga2 master
 
 ## Requirements
 
 This role depends on the extra plugin from `Galaxy deltabg.extended_facts`.
 Run `ansible-galaxy install -r DeltaBG.icinga2/requirements.yml` before using this role.
 
-##### Example playbook `playbooks/icinga2-all.yml`
+## Prerequisites
+
+* At least one Icinga2 master host and one Icinga2 client must be defined in your inventory file, otherwise the roles will fail.
+* Role deltabg.icinga2_client must be present
+
+## Supported OS
+
+* CentOS 8
+
+### Example inventory in .INI format
 
 ```
+[icinga_master]
+icinga2-master1 ansible_host=1.2.3.4
+
+[icinga_clients]
+client1 ansible_host=1.2.3.5
+```
+
+### Example playbook `playbooks/icinga2.yml`
+
+```
+---
 - name: Gather facts from clients
   hosts: icinga_clients
   pre_tasks:
@@ -17,50 +37,48 @@ Run `ansible-galaxy install -r DeltaBG.icinga2/requirements.yml` before using th
         state: present
       tags: configure
   tasks:
-    - mlg1.extended_facts.extended_facts:
+    - deltabg.extended_facts.extended_facts:
       tags: configure
 
-- name: Configure and install Icinga2 master
-  hosts: icinga
+- name: Configure clients on Icinga2 master
+  hosts: icinga_master
   roles:
-    - ansible-role-icinga2
+    - deltabg.icinga2
 
-- name: Configure and install Icinga2 on clients
+- name: Install Icinga2 on clients
   gather_facts: no
   hosts: icinga_clients
   roles:
-    - ansible-role-icinga2-client
-```
-
-##### Example host_vars when configuring a client: `inventories/icinga2/production/host_vars/client1.yml`
-
-```
----
-icinga2_client_os: Linux
-icinga2_client_os_family: RedHat
-icinga2_host_specific_services: |
-  vars.http_vhosts["http"] = {
-    http_uri = "http://localhost"
-  }
-  vars.disks["disk /"] = {
-    disk_partitions = "/"
-  }
-  vars.notification["mail"] = {
-    groups = [ "icingaadmins" ]
-  }
-
-# Individual thresholds are set via vars.
-# Vars defined by generic services can be checked here: https://icinga.com/docs/icinga-2/latest/doc/10-icinga-template-library/
-icinga2_client_vars: |
-  vars.http_enabled = true
-  vars.swap_enabled = false
-  vars.load_wload1 = 5
-  vars.load_wload5 = 3
-  vars.load_wload15 = 2
-  vars.load_cload1 = 15
-  vars.load_cload5 = 12
-  vars.load_cload15 = 10
-  vars.procs_warning = 300
-  vars.procs_critical = 600
+    - deltabg.icinga2_client
 ...
 ```
+
+### Icinga2 plugins
+
+There are number of plugins which are installed on the Icinga2 master and/or Icinga2 clients. Some of them use the `deltabg.extended_facts` plugin to automatically configure each host, others need manual configuration. Manual configuration is done via host_vars. Please note, that at a minumim, it is not neccessary to create host_vars, you are needed to place your Icinga2 client in the inventory file only. Here is a list of installed plugins, where they are installed and whether or not they need manual configuration (meaning they are configured using facts from the deltabg.extended_facts plugin) via host_vars:
+
+| Plugin name                        | Location | Configuration |
+|------------------------------------|----------|---------------|
+| ipmi_sensor_v3                     | Master   | Manual        |
+| ping4                              | Master   | Automatic     |
+| ping6                              | Master   | Automatic     |
+| ssh                                | Agent    | Automatic     |
+| http_vhost                         | Agent    | Manual        |
+| disk                               | Agent    | Automatic     |
+| icinga                             | Agent    | Automatic     |
+| load                               | Agent    | Automatic     |
+| procs                              | Agent    | Automatic     |
+| swap                               | Agent    | Automatic     |
+| users                              | Agent    | Automatic     |
+| mysql                              | Agent    | Automatic     |
+| mysql_health_slave_replication_lag | Agent    | Manual        |
+| mysql_health_slave_io_running      | Agent    | Manual        |
+| mysql_health_slave_sql_running     | Agent    | Manual        |
+| check_rbl                          | Agent    | Automatic     |
+| check_raid                         | Agent    | Automatic     |
+| check_smart_pl                     | Agent    | Automatic     |
+| iostats                            | Agent    | Automatic     |
+
+#### Tips and tricks
+
+* In order to configure and install single client, you can use the `--limit` option when running your playbook. Example usage: `ansible-playbook playbooks/icinga2.yml -i inventories/hosts.ini --limit 'client1'`
